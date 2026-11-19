@@ -1,0 +1,180 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "id": "72d682f8-2b75-4c5f-a0df-915405be948f",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -272,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "cityName": "Mumbai"
+      },
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -32
+      ],
+      "id": "aab635cf-2814-4c5e-a629-72e9556c9161",
+      "name": "OpenWeatherMap",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "xIyLifrXEh7W0GuJ",
+          "name": "OpenWeatherMap account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "367f011a-5a14-44f5-b3de-574dcd6fa44d",
+              "leftValue": "={{ $json.wether[0] }}",
+              "rightValue": "Rain",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        176,
+        -32
+      ],
+      "id": "b99ea3b6-253c-40fc-907c-fc4cfb426e90",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "harshada147999@gmail.com",
+        "subject": "Weather Alert: Rain Expected Today",
+        "message": "Hello,  Rain is expected today according to the latest weather forecast. Please carry an umbrella or raincoat while stepping outside and plan your outdoor activities accordingly.  Stay safe and have a great day!  Regards, AI Weather Monitoring Agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        -128
+      ],
+      "id": "af55daf4-27d6-451b-addf-1f1a9d44c4dc",
+      "name": "Send a message",
+      "webhookId": "36e658fa-8d1b-4e2a-9bf5-20a73d6f4022",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5v2FDVkj13qi0ijp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "harshada147999@gmail.com",
+        "subject": "Weather Update: No Rain Expected Today",
+        "message": "Hello,  Good news! No rain is expected today according to the latest weather forecast. You can plan your outdoor activities without worrying about rainfall.  Have a wonderful day ahead!  Regards, AI Weather Monitoring Agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        64
+      ],
+      "id": "30551df8-eb36-4689-a43b-fc4f5fd258fb",
+      "name": "Send a message1",
+      "webhookId": "7dfeaf0a-643a-4df5-bd41-2e3c1c13c625",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5v2FDVkj13qi0ijp",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenWeatherMap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6cf5f39e-26de-431a-b3ea-80f2b200fcb2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "822950117a47425ebf8120bf94ff8f6590a7b94ba9d46296ab0aa350fd997e87"
+  },
+  "nodeGroups": [],
+  "id": "71QSx1EInkxUsxhf",
+  "tags": []
+}
